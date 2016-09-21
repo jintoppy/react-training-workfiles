@@ -1,6 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var EmployeeRow = require('./EmployeeRow');
+var EmployeeDetails = require('./EmployeeDetails');
 
 var Employees = React.createClass({
 	getInitialState: function(){
@@ -14,22 +15,28 @@ var Employees = React.createClass({
 					name: 'Sree',
 					empId: 113
 				}
-			]
+			],
+			selectedEmployee: null
 		};
+	},
+	onRowBtnClick: function(emp){
+		this.setState({
+			selectedEmployee: emp
+		});
 	},
 	render: function(){
 		var trs = [];
 		for(var i=0; i<this.state.employees.length;i++){
 			var currEmployee =  this.state.employees[i];
 			var trEl = (
-					<tr>
-						<td>{currEmployee.name}</td>
-						<td>{currEmployee.empId}</td>
-					</tr>
+					<EmployeeRow 
+						key={i} 
+						onRowBtnClick={this.onRowBtnClick} currEmployee={currEmployee} />
 				)
 			trs.push(trEl);
 		}
 		return (
+				<div>
 				<table>
 					<thead>
 						<tr>
@@ -42,6 +49,8 @@ var Employees = React.createClass({
 						{trs}
 					</tbody>
 				</table>
+				<EmployeeDetails emp={this.state.selectedEmployee}/>
+				</div>
 			)
 	}
 });
