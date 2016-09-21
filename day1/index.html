@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Initial</title>
+</head>
+<body>
+<div id="container">
+	
+
+</div>
+<script type="text/javascript" src="react.js"></script>
+<script type="text/javascript" src="react-dom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+<script type="text/babel">
+
+	var Child = React.createClass({
+		render: function(){
+			return (
+				<div>
+					<span>{this.props.myname}</span>
+					<span>{this.props.mytitle}</span>
+					<button>This is child component</button>
+				</div>
+			)
+		}
+	});
+
+	var App = React.createClass({
+	getInitialState: function(){
+		return {
+			title: 'initial title'
+		};
+	},
+	onMyBtnClick: function(){
+		this.setState({
+			title: 'changed title'
+		});
+	},
+	render: function(){
+		return (
+			<div className="mydiv">
+				<button onClick={this.onMyBtnClick}>Click me to change state</button>
+				<span>of child</span>
+				<Child 
+					myname="my name"
+					mytitle={this.state.title} />
+			</div>
+		)
+	}
+});
+ReactDOM.render(
+	   <App/>
+	,
+	document.getElementById('container')
+	)
+
+</script>
+</body>
+</html>
