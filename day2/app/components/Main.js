@@ -1,4 +1,5 @@
 var React = require('react');
+import {Link} from 'react-router';
 
 var Main = React.createClass({
 	render: function(){
@@ -6,7 +7,8 @@ var Main = React.createClass({
 			<div>
 				<header>
 					React App
-
+					<Link to="/">Home</Link>
+					<Link to="/github">Github Page</Link>
 				</header>
 				<section>
 					{this.props.children}

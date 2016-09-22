@@ -9969,6 +9969,11 @@
 		}
 	
 		_createClass(GithubUser, [{
+			key: 'goHome',
+			value: function goHome() {
+				this.props.history.pushState(null, "/");
+			}
+		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				var self = this;
@@ -10041,6 +10046,11 @@
 				return _react2.default.createElement(
 					'div',
 					null,
+					_react2.default.createElement(
+						'button',
+						{ onClick: this.goHome.bind(this) },
+						'Go To Home Page'
+					),
 					outputEl
 				);
 			}
@@ -11401,7 +11411,10 @@
 
 	'use strict';
 	
+	var _reactRouter = __webpack_require__(1);
+	
 	var React = __webpack_require__(3);
+	
 	
 	var Main = React.createClass({
 		displayName: 'Main',
@@ -11413,7 +11426,17 @@
 				React.createElement(
 					'header',
 					null,
-					'React App'
+					'React App',
+					React.createElement(
+						_reactRouter.Link,
+						{ to: '/' },
+						'Home'
+					),
+					React.createElement(
+						_reactRouter.Link,
+						{ to: '/github' },
+						'Github Page'
+					)
 				),
 				React.createElement(
 					'section',

@@ -9,6 +9,9 @@ class GithubUser extends React.Component{
 			users: []
 		};
 	}
+	goHome(){
+		this.props.history.pushState(null, "/");
+	}
 	componentDidMount(){
 		let self = this;
 		axios.get('https://api.github.com/users')
@@ -51,6 +54,7 @@ class GithubUser extends React.Component{
 		}
 		return (
 				<div>
+					<button onClick={this.goHome.bind(this)}>Go To Home Page</button>
 					{outputEl}			
 				</div>
 			)
