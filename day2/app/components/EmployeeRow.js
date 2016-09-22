@@ -1,6 +1,10 @@
 var React = require('react');
 
 var EmployeeRow = React.createClass({
+	propTypes: {
+		currEmployee: React.PropTypes.object,
+		onRowBtnClick: React.PropTypes.func
+	},
 	render: function(){
 		var currEmployee = this.props.currEmployee;
 		return (

@@ -1,9 +1,12 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Main = require('./components/Main');
+import {Router, hashHistory} from 'react-router';
+import routes from './routes';
 
 ReactDOM.render(
-	   <Main/>
+	   <Router history={hashHistory}>
+	   	{routes}
+	   </Router>
 	,
 	document.getElementById('container')
 	)

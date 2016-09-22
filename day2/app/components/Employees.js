@@ -48,7 +48,8 @@ var Employees = React.createClass({
 			var trEl = (
 					<EmployeeRow 
 						key={i} 
-						onRowBtnClick={this.onRowBtnClick} currEmployee={currEmployee} />
+						onRowBtnClick={this.onRowBtnClick} 
+						currEmployee={currEmployee} />
 				)
 			trs.push(trEl);
 		}

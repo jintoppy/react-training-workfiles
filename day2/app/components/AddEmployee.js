@@ -35,6 +35,9 @@ class AddEmployee extends React.Component{
 	}
 }
 
+AddEmployee.propTypes = {
+	onAddEmployee: React.PropTypes.func
+};
 
 
 export default AddEmployee;
