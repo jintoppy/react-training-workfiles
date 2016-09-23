@@ -9975,11 +9975,6 @@
 		}
 	
 		_createClass(GithubUser, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				_GithubStore2.default.addChangeListener(this.onDataChange.bind(this));
-			}
-		}, {
 			key: 'componentWillUnMount',
 			value: function componentWillUnMount() {
 				_GithubStore2.default.removeChangeListener(this.onDataChange.bind(this));
@@ -10001,10 +9996,9 @@
 				var self = this;
 				_GithubActions2.default.onGithubFetchStart();
 				_axios2.default.get('https://api.github.com/users').then(function (response) {
-					self.setState({
-						users: response.data
-					});
+					_GithubActions2.default.onGithubFetchSuccess(response.data);
 				});
+				_GithubStore2.default.addChangeListener(this.onDataChange.bind(this));
 			}
 		}, {
 			key: 'render',
@@ -29840,6 +29834,18 @@
 			(0, _AppDispatcher.dispatch)({
 				actionType: _AppConstants2.default.GITHUB_FETCH_STARTED
 			});
+		},
+		onGithubFetchSuccess: function onGithubFetchSuccess(users) {
+			(0, _AppDispatcher.dispatch)({
+				actionType: _AppConstants2.default.GITHUB_GOT_REPONSE_SUCCESS,
+				item: users
+			});
+		},
+		onGithubFetchError: function onGithubFetchError(err) {
+			(0, _AppDispatcher.dispatch)({
+				actionType: _AppConstants2.default.GITHUB_GOT_REPONSE_FAILURE,
+				item: err
+			});
 		}
 	};
 	
@@ -29866,9 +29872,16 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var state = {
-		isLoading: false,
+		isLoading: true,
 		githubUsers: []
 	};
+	
+	function _setResponse(users) {
+		state = {
+			isLoading: false,
+			githubUsers: users
+		};
+	}
 	
 	var GithubStore = Object.assign(_events.EventEmitter.prototype, {
 		addChangeListener: function addChangeListener(callback) {
@@ -29889,6 +29902,10 @@
 				case _AppConstants2.default.GITHUB_FETCH_STARTED:
 					state.isLoading = true;
 					break;
+				case _AppConstants2.default.GITHUB_GOT_REPONSE_SUCCESS:
+					_setResponse(action.item);
+					break;
+	
 			}
 	
 			GithubStore.emitChange();

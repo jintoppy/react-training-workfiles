@@ -3,9 +3,16 @@ import {EventEmitter} from 'events';
 import AppConstants from '../constants/AppConstants';
 
 let state = {
-	isLoading: false,
+	isLoading: true,
 	githubUsers: []
 };
+
+function _setResponse(users){
+	state = {
+		isLoading: false,
+		githubUsers: users
+	};
+}
 
 
 const GithubStore = Object.assign(EventEmitter.prototype,{
@@ -27,6 +34,10 @@ const GithubStore = Object.assign(EventEmitter.prototype,{
 			case AppConstants.GITHUB_FETCH_STARTED:
 				state.isLoading = true;
 			break;
+			case AppConstants.GITHUB_GOT_REPONSE_SUCCESS:
+				_setResponse(action.item);
+			break;
+			
 		}
 
 		GithubStore.emitChange();

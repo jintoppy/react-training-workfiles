@@ -10,9 +10,6 @@ class GithubUser extends React.Component{
 		super(props);
 		this.state = GithubStore.getState();
 	}
-	componentDidMount(){
-		GithubStore.addChangeListener(this.onDataChange.bind(this));
-	}
 	componentWillUnMount(){
 		GithubStore.removeChangeListener(this.onDataChange.bind(this));	
 	}
@@ -28,10 +25,9 @@ class GithubUser extends React.Component{
 		GithubActions.onGithubFetchStart();
 		axios.get('https://api.github.com/users')
 			.then(function(response){
-				self.setState({
-					users: response.data
-				});
+				GithubActions.onGithubFetchSuccess(response.data);
 			});
+		GithubStore.addChangeListener(this.onDataChange.bind(this));
 	}
 	render(){
 		let trs = [];
