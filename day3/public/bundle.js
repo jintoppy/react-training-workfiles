@@ -9946,6 +9946,14 @@
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
+	var _GithubActions = __webpack_require__(273);
+	
+	var _GithubActions2 = _interopRequireDefault(_GithubActions);
+	
+	var _GithubStore = __webpack_require__(274);
+	
+	var _GithubStore2 = _interopRequireDefault(_GithubStore);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -9962,13 +9970,27 @@
 	
 			var _this = _possibleConstructorReturn(this, (GithubUser.__proto__ || Object.getPrototypeOf(GithubUser)).call(this, props));
 	
-			_this.state = {
-				users: []
-			};
+			_this.state = _GithubStore2.default.getState();
 			return _this;
 		}
 	
 		_createClass(GithubUser, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				_GithubStore2.default.addChangeListener(this.onDataChange.bind(this));
+			}
+		}, {
+			key: 'componentWillUnMount',
+			value: function componentWillUnMount() {
+				_GithubStore2.default.removeChangeListener(this.onDataChange.bind(this));
+			}
+		}, {
+			key: 'onDataChange',
+			value: function onDataChange() {
+				var newState = _GithubStore2.default.getState();
+				this.setState(newState);
+			}
+		}, {
 			key: 'goHome',
 			value: function goHome() {
 				this.props.history.pushState(null, "/");
@@ -9977,6 +9999,7 @@
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				var self = this;
+				_GithubActions2.default.onGithubFetchStart();
 				_axios2.default.get('https://api.github.com/users').then(function (response) {
 					self.setState({
 						users: response.data
@@ -9989,8 +10012,8 @@
 				var trs = [];
 				var outputEl = void 0;
 	
-				for (var i = 0; i < this.state.users.length; i++) {
-					var user = this.state.users[i];
+				for (var i = 0; i < this.state.githubUsers.length; i++) {
+					var user = this.state.githubUsers[i];
 					var userTr = _react2.default.createElement(
 						'tr',
 						{ key: i },
@@ -10008,7 +10031,7 @@
 					trs.push(userTr);
 				}
 	
-				if (this.state.users.length > 0) {
+				if (!this.state.isLoading) {
 					outputEl = _react2.default.createElement(
 						'table',
 						null,
@@ -29793,6 +29816,87 @@
 		GITHUB_GOT_REPONSE_FAILURE: 'GITHUB_GOT_REPONSE_FAILURE'
 	};
 	exports.default = constants;
+
+/***/ },
+/* 273 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _AppDispatcher = __webpack_require__(124);
+	
+	var _AppConstants = __webpack_require__(272);
+	
+	var _AppConstants2 = _interopRequireDefault(_AppConstants);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var GithubActions = {
+		onGithubFetchStart: function onGithubFetchStart() {
+			(0, _AppDispatcher.dispatch)({
+				actionType: _AppConstants2.default.GITHUB_FETCH_STARTED
+			});
+		}
+	};
+	
+	exports.default = GithubActions;
+
+/***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _AppDispatcher = __webpack_require__(124);
+	
+	var _events = __webpack_require__(128);
+	
+	var _AppConstants = __webpack_require__(272);
+	
+	var _AppConstants2 = _interopRequireDefault(_AppConstants);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var state = {
+		isLoading: false,
+		githubUsers: []
+	};
+	
+	var GithubStore = Object.assign(_events.EventEmitter.prototype, {
+		addChangeListener: function addChangeListener(callback) {
+			this.on('ON_CHANGE', callback);
+		},
+		removeChangeListener: function removeChangeListener(callback) {
+			this.removeListener('ON_CHANGE', callback);
+		},
+		emitChange: function emitChange() {
+			this.emit('ON_CHANGE');
+		},
+		getState: function getState() {
+			return state;
+		},
+		dispatcherIndex: (0, _AppDispatcher.register)(function (action) {
+	
+			switch (action.actionType) {
+				case _AppConstants2.default.GITHUB_FETCH_STARTED:
+					state.isLoading = true;
+					break;
+			}
+	
+			GithubStore.emitChange();
+		})
+	
+	});
+	
+	exports.default = GithubStore;
 
 /***/ }
 /******/ ]);

@@ -1,19 +1,31 @@
 import React from 'react';
 import axios from 'axios';
+import GithubActions from '../actions/GithubActions';
+import GithubStore from '../stores/GithubStore';
+
 
 class GithubUser extends React.Component{
 
 	constructor(props){
 		super(props);
-		this.state = {
-			users: []
-		};
+		this.state = GithubStore.getState();
+	}
+	componentDidMount(){
+		GithubStore.addChangeListener(this.onDataChange.bind(this));
+	}
+	componentWillUnMount(){
+		GithubStore.removeChangeListener(this.onDataChange.bind(this));	
+	}
+	onDataChange(){
+		var newState =GithubStore.getState(); 
+		this.setState(newState);
 	}
 	goHome(){
 		this.props.history.pushState(null, "/");
 	}
 	componentDidMount(){
 		let self = this;
+		GithubActions.onGithubFetchStart();
 		axios.get('https://api.github.com/users')
 			.then(function(response){
 				self.setState({
@@ -25,8 +37,8 @@ class GithubUser extends React.Component{
 		let trs = [];
 		let outputEl;
 
-		for(let i=0; i<this.state.users.length;i++){
-			let user = this.state.users[i];
+		for(let i=0; i<this.state.githubUsers.length;i++){
+			let user = this.state.githubUsers[i];
 			let userTr = (
 					<tr key={i}>
 						<td>{user.login}</td>
@@ -36,7 +48,7 @@ class GithubUser extends React.Component{
 			trs.push(userTr);
 		}
 
-		if(this.state.users.length>0){
+		if(!this.state.isLoading){
 			outputEl = <table>
 						<thead>
 							<tr>
