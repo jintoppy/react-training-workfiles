@@ -1,6 +1,6 @@
 var React = require('react');
 import {Link} from 'react-router';
-
+import EmployeeCount from './EmployeeCount';
 var Main = React.createClass({
 	render: function(){
 		return (
@@ -9,6 +9,7 @@ var Main = React.createClass({
 					React App
 					<Link to="/">Home</Link>
 					<Link to="/github">Github Page</Link>
+					<EmployeeCount />
 				</header>
 				<section>
 					{this.props.children}

@@ -2,7 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var EmployeeRow = require('./EmployeeRow');
 var EmployeeDetails = require('./EmployeeDetails');
-import EmployeeStore from '..stores/EmployeeStore';
+import EmployeeStore from '../stores/EmployeeStore';
 import AddEmployee  from './AddEmployee';
 import EmployeeActions from '../actions/EmployeeActions';
 
@@ -12,14 +12,14 @@ var Employees = React.createClass({
 	},
 	componentDidMount: function(){
 		console.log('component Did Mount');
-		EmployeeStore.addChangListener(onDataChange);
+		EmployeeStore.addChangListener(this.onDataChange);
 	},
 	componentDidUpdate: function(){
 		console.log('component Did Update');
 
 	},
 	componentWillUnMount: function(){
-		EmployeeStore.removeChangeListener(onDataChange);	
+		EmployeeStore.removeChangeListener(this.onDataChange);	
 	},
 	onDataChange: function(){
 		this.setState({

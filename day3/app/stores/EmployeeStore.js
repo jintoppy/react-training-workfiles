@@ -1,5 +1,6 @@
 import {register} from '../dispatcher/AppDispatcher';
 import {EventEmitter} from 'events';
+import AppConstants from '../constants/AppConstants';
 
 
 let employees = [
@@ -33,11 +34,11 @@ const EmployeeStore = Object.assign(EventEmitter.prototype,{
 	dispatcherIndex: register(function(action){
 
 		switch(action.actionType){
-			case 'ADD_EMPLOYEE':
+			case AppConstants.ADD_EMPLOYEE:
 			_addEmployee(action.item);
 		}
 
-		this.emitChange();
+		EmployeeStore.emitChange();
 
 	})
 
