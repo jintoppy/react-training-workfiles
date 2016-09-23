@@ -12,6 +12,7 @@ var EmployeeRow = React.createClass({
 						<td>{currEmployee.name}</td>
 						<td>{currEmployee.empId}</td>
 						<td><button onClick={this.props.onRowBtnClick.bind(null, currEmployee)}>View details</button></td>
+						<td><button onClick={this.props.onRemoveEmployee}>Remove</button></td>
 				</tr>
 			)
 	}

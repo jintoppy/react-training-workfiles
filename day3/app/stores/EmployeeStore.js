@@ -18,6 +18,10 @@ function _addEmployee(emp){
 	employees.push(emp);
 }
 
+function _removeEmployee(index){
+	employees.splice(index,1);
+}
+
 const EmployeeStore = Object.assign(EventEmitter.prototype,{
 	addChangListener: function(callback){
 		this.on('ON_CHANGE', callback);
@@ -35,7 +39,11 @@ const EmployeeStore = Object.assign(EventEmitter.prototype,{
 
 		switch(action.actionType){
 			case AppConstants.ADD_EMPLOYEE:
-			_addEmployee(action.item);
+				_addEmployee(action.item);
+			break;
+			case AppConstants.REMOVE_EMPLOYEE:
+				_removeEmployee(action.item);
+			break;
 		}
 
 		EmployeeStore.emitChange();

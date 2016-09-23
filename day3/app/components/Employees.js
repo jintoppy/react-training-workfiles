@@ -40,6 +40,9 @@ var Employees = React.createClass({
 			selectedEmployee: emp
 		});
 	},
+	onRemoveEmployee: function(index){
+		EmployeeActions.removeEmployee(index);
+	},
 	render: function(){
 		var trs = [];
 		for(var i=0; i<this.state.employees.length;i++){
@@ -48,6 +51,7 @@ var Employees = React.createClass({
 					<EmployeeRow 
 						key={i} 
 						onRowBtnClick={this.onRowBtnClick} 
+						onRemoveEmployee={this.onRemoveEmployee.bind(this,i)}
 						currEmployee={currEmployee} />
 				)
 			trs.push(trEl);
@@ -60,6 +64,7 @@ var Employees = React.createClass({
 							<th>Name</th>
 							<th>Employee Id</th>
 							<th>View</th>
+							<th>Remove</th>
 						</tr>
 					</thead>
 					<tbody>

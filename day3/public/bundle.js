@@ -11516,6 +11516,9 @@
 				selectedEmployee: emp
 			});
 		},
+		onRemoveEmployee: function onRemoveEmployee(index) {
+			_EmployeeActions2.default.removeEmployee(index);
+		},
 		render: function render() {
 			var trs = [];
 			for (var i = 0; i < this.state.employees.length; i++) {
@@ -11523,6 +11526,7 @@
 				var trEl = React.createElement(EmployeeRow, {
 					key: i,
 					onRowBtnClick: this.onRowBtnClick,
+					onRemoveEmployee: this.onRemoveEmployee.bind(this, i),
 					currEmployee: currEmployee });
 				trs.push(trEl);
 			}
@@ -11552,6 +11556,11 @@
 								'th',
 								null,
 								'View'
+							),
+							React.createElement(
+								'th',
+								null,
+								'Remove'
 							)
 						)
 					),
@@ -11603,6 +11612,10 @@
 		employees.push(emp);
 	}
 	
+	function _removeEmployee(index) {
+		employees.splice(index, 1);
+	}
+	
 	var EmployeeStore = Object.assign(_events.EventEmitter.prototype, {
 		addChangListener: function addChangListener(callback) {
 			this.on('ON_CHANGE', callback);
@@ -11621,6 +11634,10 @@
 			switch (action.actionType) {
 				case _AppConstants2.default.ADD_EMPLOYEE:
 					_addEmployee(action.item);
+					break;
+				case _AppConstants2.default.REMOVE_EMPLOYEE:
+					_removeEmployee(action.item);
+					break;
 			}
 	
 			EmployeeStore.emitChange();
@@ -29583,6 +29600,12 @@
 				actionType: _AppConstants2.default.ADD_EMPLOYEE,
 				item: emp
 			});
+		},
+		removeEmployee: function removeEmployee(index) {
+			(0, _AppDispatcher.dispatch)({
+				actionType: _AppConstants2.default.REMOVE_EMPLOYEE,
+				item: index
+			});
 		}
 	};
 	
@@ -29625,6 +29648,15 @@
 						'button',
 						{ onClick: this.props.onRowBtnClick.bind(null, currEmployee) },
 						'View details'
+					)
+				),
+				React.createElement(
+					'td',
+					null,
+					React.createElement(
+						'button',
+						{ onClick: this.props.onRemoveEmployee },
+						'Remove'
 					)
 				)
 			);
@@ -29754,7 +29786,8 @@
 		value: true
 	});
 	var constants = {
-		ADD_EMPLOYEE: 'ADD_EMPLOYEE'
+		ADD_EMPLOYEE: 'ADD_EMPLOYEE',
+		REMOVE_EMPLOYEE: 'REMOVE_EMPLOYEE'
 	};
 	exports.default = constants;
 
